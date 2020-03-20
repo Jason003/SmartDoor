@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="WP2 for Smart Door Authentication System">
+    <title>HomePage</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="homepage.css" rel="stylesheet">
+    <script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
+    <script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
+    <script type="text/javascript" src="lib/CryptoJS/components/hmac.js"></script>
+    <script type="text/javascript" src="lib/CryptoJS/components/enc-base64.js"></script>
+    <script type="text/javascript" src="lib/url-template/url-template.js"></script>
+    <script type="text/javascript" src="lib/apiGatewayCore/sigV4Client.js"></script>
+    <script type="text/javascript" src="lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
+    <script type="text/javascript" src="apigClient.js"></script>
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="text-center">
+<div id='error-message'></div>
+<form class="needs-validation" novalidate>
+  <h1>Fill Visitor's Information</h1>
+    <div class="form-row">
+        <div class="col-md-12 mb-3">
+            <input type="hidden" class="form-control" id="faceId" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-12 mb-3">
+            <input type="hidden" class="form-control" id="objectKey" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-12 mb-3">
+            <input type="hidden" class="form-control" id="bucket" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-12 mb-3">
+            <input type="hidden" class="form-control" id="createdTimestamp" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <input type="text" class="form-control" id="firstName" placeholder="First name" required>
+        </div>
+        <div class="col-md-6 mb-3">
+            <input type="text" class="form-control" id="lastName" placeholder="Last name" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-12 mb-3">
+            <input type="text" class="form-control" id="phoneNumber" placeholder="US Phone Number(without '+1')"
+                   required>
+        </div>
+    </div>
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" id="denyAccess"> Deny Access
+        </label>
+    </div>
+
+    <button class="btn btn-lg btn-success btn-block" type="button" id="submitButton">Submit form</button>
+</form>
+<script type="text/javascript">
+    if (window.location.hash) {
+        // hash found
+        var hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+        var strings = hash.split("&");
+        var faceId = strings[0];
+        var objectKey = strings[1];
+        var bucket = strings[2];
+        var createdTimestamp = strings[3];
+        //alert("bu"+bucket+"time"+createdTimestamp+"id"+faceId+"obj"+objectKey);
+        document.getElementById("faceId").value = faceId;
+        document.getElementById("objectKey").value = objectKey;
+        document.getElementById("bucket").value = bucket;
+        document.getElementById("createdTimestamp").value = createdTimestamp;
+    } else {
+        // No hash found
+        alert("Error! Didn't get the required information from url!");
+    }
+</script>
+<script src="WP1.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+        integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+        integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+        crossorigin="anonymous"></script>
+</body>
+</html>
