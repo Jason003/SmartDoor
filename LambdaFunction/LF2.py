@@ -40,7 +40,7 @@ def lambda_handler(event, context):
             # send sms to visitor
             boto3.client("sns", region_name='us-west-2').publish(
                 PhoneNumber='+1' + phoneNumber,
-                Message='Hello, {}!\r\nYou are allowed to enter. Please click the following link and enter the OTP below:\r\n {}\r\nYour OTP is:\r\n {}\r\nThis OTP is valid in 5 minutes, and we will only send you a new OTP after 5 minutes'.format(
+                Message='Hello, {}!\r\nYou are allowed to enter. Please click the following link and enter the OTP below:\r\n {}\r\nYour OTP is:\r\n {}\r\nThis OTP is valid in 5 minutes, and we may only send you a new OTP after 5 minutes'.format(
                     name, WP2_URL, otp)
             )
             db_resource.Table(PASSCODE_TABLE).put_item(
@@ -53,31 +53,25 @@ def lambda_handler(event, context):
             )
             return "Add visitor successfully!"
         else:
-            delete_faceID_from_collection(COLLECTION_ID, [faceId])
-            delete_photo_from_S3(bucket, objectKey)
+            deny_access([faceId], bucket, objectKey)
             return "Deny visitor\'s accesss successfully!"
     else:
         checked = event['checked']
         if int(checked) == 1:
-            delete_faceID_from_collection(COLLECTION_ID, [faceId])
-            delete_photo_from_S3(bucket, objectKey)
+            deny_access([faceId], bucket, objectKey)
             return "Deny visitor\'s accesss successfully!"
         else:
-            return "Parameter error! Please enter all information provided!"
+            return "Parameter error!"
 
 
-def delete_faceID_from_collection(collectionId, faceIds):
-    rekognition_client = boto3.client('rekognition')
-    rekognition_client.delete_faces(
-        CollectionId=collectionId,
+def deny_access(faceIds, bucket, object_key):
+    # delete face from collection
+    boto3.client('rekognition').delete_faces(
+        CollectionId=COLLECTION_ID,
         FaceIds=faceIds
     )
-
-
-def delete_photo_from_S3(bucket_name, object_key):
-    s3 = boto3.resource('s3')
-    object_summary = s3.ObjectSummary(bucket_name, object_key)
-    object_summary.delete()
+    # delete imgs from s3
+    boto3.resource('s3').ObjectSummary(bucket, object_key).delete()
 
 
 def search_OTP_dynamoDB(otp):

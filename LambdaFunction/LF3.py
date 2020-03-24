@@ -11,14 +11,12 @@ EXPIRE_TIME = 300
 
 def lambda_handler(event, context):
     if event['OTP']:
-        OTP = event['OTP']
-        table = dynamodb.Table(PASSCODE_TABLE)
-        response = table.query(
+        response = dynamodb.Table(PASSCODE_TABLE).query(
             IndexName='OTP-index',
-            KeyConditionExpression=Key('OTP').eq(OTP)
+            KeyConditionExpression=Key('OTP').eq(event['OTP'])
         )
         item_array = response['Items']
-        if item_array != []:
+        if item_array:
             record = item_array[0]
             faceId = record['faceId']
             timestamp = float(record['timestamp'])
