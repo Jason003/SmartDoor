@@ -43,8 +43,8 @@ def lambda_handler(event, context):
         inform_owner(fragment_number)
     else:  # indicates that face is known
         face_id = face['MatchedFaces'][0]['Face']['FaceId']
-        # user has been authorized, and we have not sent OTP in last 5 minutes
-        if find_faceId(face_id, VISITOR_TABLE) and (not find_faceId(face_id, PASSCODE_TABLE) or otp_expired(face_id)):
+        # user has been authorized
+        if find_faceId(face_id, VISITOR_TABLE): #(not find_faceId(face_id, PASSCODE_TABLE) or otp_expired(face_id)):
             otp = generate_OTP()  # generate otp for the user
 
             # add otp to PASSCODE_TABLE
